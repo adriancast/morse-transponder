@@ -8,6 +8,7 @@ from transponder.client import MorseTransponder
 @click.option("--host", default='127.0.0.1', type=str)
 @click.option("--port", default='65432', type=int)
 def serve(host, port):
+    print('Waiting socket connections at host {}:{}'.format(host, port))
     while True:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind((host, port))
@@ -20,12 +21,11 @@ def serve(host, port):
                     if not data:
                         break
 
-                    print(data)
                     transponder = MorseTransponder()
                     morse_text = transponder.translate_to_morse_and_play_audio(text=data.decode('utf-8'))
-                    print('Morse', morse_text)
+                    print('Sending text "{}" translated to "{}" to address {}'.format(data.decode('utf-8'), morse_text, addr))
 
-                    conn.sendall(data)
+                    conn.sendall(str.encode(morse_text))
 
 if __name__ == '__main__':
     serve()
