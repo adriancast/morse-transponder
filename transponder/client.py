@@ -1,5 +1,6 @@
 from playsound import playsound
 from .utils import translate_to_morse
+import time
 
 
 class MorseTransponder:
@@ -11,6 +12,8 @@ class MorseTransponder:
                 playsound('sounds/long.wav')
             elif character == '.':
                 playsound('sounds/short.wav')
+            elif character == ' ':
+                time.sleep(0.2)
 
     def translate_to_morse_and_play_audio(self, text: str) -> str:
         morse_text = translate_to_morse(text=text)
